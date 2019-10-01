@@ -42,9 +42,23 @@ window.renderStatistics = function(ctx, players, times) {
   ctx.fillStyle = '#000';
 
   var maxTime = getMaxElement(times);
+  var player = players.indexOf('Вы');
+
+  function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
   for (var i = 0; i < players.length; i++) {
+    if (i === player) {
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+    } else {
+      ctx.fillStyle = 'hsl(240,' + getRandomIntInclusive(0, 100) + '%,50%)';
+    }
     ctx.fillText(players[i], CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i, CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT/1.5);
+    ctx.fillText(Math.round(times[i]), CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i,  CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - LINE_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime));
     ctx.fillRect(CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i, CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime), BAR_WIDTH, (BAR_HEIGHT * times[i]) / maxTime);
   }
+
 };
