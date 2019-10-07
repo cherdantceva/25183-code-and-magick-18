@@ -35,6 +35,14 @@ var getMaxElement = function(arr) {
   return maxElement;
 };
 
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
 window.renderStatistics = function(ctx, players, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
@@ -44,11 +52,6 @@ window.renderStatistics = function(ctx, players, times) {
   var maxTime = getMaxElement(times);
   var player = players.indexOf('Вы');
 
-  function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 
   for (var i = 0; i < players.length; i++) {
     if (i === player) {
@@ -56,9 +59,36 @@ window.renderStatistics = function(ctx, players, times) {
     } else {
       ctx.fillStyle = 'hsl(240,' + getRandomIntInclusive(0, 100) + '%,50%)';
     }
-    ctx.fillText(players[i], CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i, CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT/1.5);
-    ctx.fillText(Math.round(times[i]), CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i,  CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - LINE_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime));
-    ctx.fillRect(CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i, CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime), BAR_WIDTH, (BAR_HEIGHT * times[i]) / maxTime);
+
+    drawText(
+      ctx,
+      players[i],
+      CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i,
+      CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT / 1.5
+    );
+
+    drawText(
+      ctx,
+      Math.round(times[i]),
+      CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i,
+      CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - LINE_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime)
+    );
+
+    drawRect(
+      ctx,
+      CLOUD_X + GAP + BAR_GAP * i + BAR_WIDTH * i,
+      CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime),
+      BAR_WIDTH,
+      (BAR_HEIGHT * times[i]) / maxTime
+    );
   }
 
 };
+
+function drawText(ctx, text, textX, textY) {
+  ctx.fillText(text, textX, textY);
+}
+
+function drawRect(ctx, rectX, rectY, rectWidth, rectHeight) {
+  ctx.fillRect(rectX, rectY, rectWidth, rectHeight);
+}
